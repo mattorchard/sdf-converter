@@ -14,7 +14,9 @@ export const HomePage: FunctionComponent = () => {
   );
   useEffect(() => {
     loadImageUrl(sampleSrc).then((image) =>
-      setPreviewImage(createSdf(image, { upResFactor: 1, alphaThreshold: 128 }))
+      setPreviewImage(
+        createSdf(image, { upResFactor: 1, alphaThreshold: 128, spread: 30 })
+      )
     );
   }, []);
   return (

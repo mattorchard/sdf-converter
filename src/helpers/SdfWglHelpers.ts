@@ -22,6 +22,7 @@ function createContext(size: Size, type: "webgl2") {
 interface SdfOptions {
   upResFactor: number;
   alphaThreshold: number;
+  spread: number;
 }
 
 export const createSdf = (
@@ -158,6 +159,8 @@ export const createSdf = (
 
   const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
   gl.uniform2f(resolutionLocation, size.width, size.height);
+  const spreadLocation = gl.getUniformLocation(program, "u_spread");
+  gl.uniform1i(spreadLocation, options.spread);
 
   gl.drawArrays(gl.TRIANGLES, 0, 3 * 2);
 
