@@ -1,0 +1,22 @@
+.home-page-grid {
+  display: grid;
+  height: 100vh;
+  overflow: hidden;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-gap: 2rem;
+  padding: 2rem;
+}
+.section-pane {
+  backdrop-filter: blur(5px);
+  background-color: var(--color-current-light);
+  border-radius: 1rem;
+  padding: 1rem;
+  border: 0.5rem solid var(--color-current-dark);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.section-pane > h2 {
+  font-weight: unset;
+  font-size: 2rem;
+}

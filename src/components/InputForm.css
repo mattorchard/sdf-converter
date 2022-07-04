@@ -1,0 +1,11 @@
+.input-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.input-form .image-preview {
+  width: 100%;
+  height: auto;
+  border: 0.5rem solid var(--color-current-dark);
+  border-radius: 1rem;
+}
