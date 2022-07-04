@@ -1,43 +1,41 @@
-
+#version 300 es
 precision mediump float;
- 
+
 uniform sampler2D u_image;
- 
-// the texCoords passed in from the vertex shader.
-varying vec2 v_texCoord;
 uniform vec2 u_resolution;
+// the texCoords passed in from the vertex shader.
+in vec2 t_texCoord;
 
-const int l_spread = 20;
 
+const int spread = 20;
+const float maxDist = float(spread);
+const float maxDistSq = pow(maxDist, 2.0);
 
-const float l_maxDist = float(l_spread);
-const float l_maxDistSq = pow(l_maxDist, 2.0);
-
+out vec4 o_outputColor;
 
 void main() {
-  vec2 l_onePixel = vec2(1.0, 1.0) / u_resolution;  
+  vec2 onePixel = vec2(1.0, 1.0) / u_resolution;  
 
-  bool l_startWithin = texture2D(u_image, v_texCoord).a >= 0.5;
+  bool startWithin = texture(u_image, t_texCoord).a >= 0.5;
    
-  float l_minDistSq = float(l_maxDistSq);
+  float minDistSq = float(maxDistSq);
 
   
-  for (int l_xOffset = -l_spread; l_xOffset <= l_spread; l_xOffset++) {
-    for (int l_yOffset = -l_spread; l_yOffset <= l_spread; l_yOffset++) {
-      vec2 l_pixelOffset = vec2(l_xOffset, l_yOffset);
-      vec2 l_pos = v_texCoord + (l_pixelOffset * l_onePixel);
-      bool l_within = texture2D(u_image, l_pos).a >= 0.5;
-      
+  for (int xOffset = -spread; xOffset <= spread; xOffset++) {
+    for (int yOffset = -spread; yOffset <= spread; yOffset++) {
+      vec2 pixelOffset = vec2(xOffset, yOffset);
+      vec2 pos = t_texCoord + (pixelOffset * onePixel);
+      bool within = texture(u_image, pos).a >= 0.5;
+
       // Matching bit, no use
-      if (l_within == l_startWithin) { continue; }
-      
-      
-      float l_distSq = pow(l_pixelOffset.x, 2.0) + pow(l_pixelOffset.y, 2.0);
-      l_minDistSq = min(l_minDistSq, l_distSq);
+      if (within == startWithin) { continue; }
+
+      float distSq = pow(pixelOffset.x, 2.0) + pow(pixelOffset.y, 2.0);
+      minDistSq = min(minDistSq, distSq);
     }
   }
 
-  float l_withinMultiplier = l_startWithin ? 1.0 : -1.0;
-  float l_intensity = 0.5 + l_withinMultiplier * (pow(l_minDistSq, 0.5) / float(l_spread));
-  gl_FragColor = vec4(l_intensity, l_intensity, l_intensity, 1.0);
+  float withinMultiplier = startWithin ? 1.0 : -1.0;
+  float intensity = 0.5 + withinMultiplier * (pow(minDistSq, 0.5) / float(spread));
+  o_outputColor = vec4(intensity, intensity, intensity, 1.0);
 }

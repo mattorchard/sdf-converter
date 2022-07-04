@@ -124,16 +124,24 @@ export const createSdf = (
     buildShader(gl.VERTEX_SHADER, vertexShader),
     buildShader(gl.FRAGMENT_SHADER, fragmentShader),
   ]);
-  const positionLocation = gl.getAttribLocation(program, "a_position");
-  const texcoordLocation = gl.getAttribLocation(program, "a_texCoord");
+  const positionLocation = gl.getAttribLocation(program, "i_position");
+  const texcoordLocation = gl.getAttribLocation(program, "i_texCoord");
 
   // Create a buffer to put three 2d clip space points in
   const positionBuffer = createBoundBuffer(
     new Float32Array(getRectangle(size))
   );
   const texcoordBuffer = createBoundBuffer(
+    // prettier-ignore
     new Float32Array([
-      0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0,
+      // First Triangle
+      0.0, 0.0,
+      1.0, 0.0,
+      0.0, 1.0,
+      // Second Triangle
+      0.0, 1.0,
+      1.0, 0.0,
+      1.0, 1.0,
     ])
   );
 
