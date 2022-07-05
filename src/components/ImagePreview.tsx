@@ -14,15 +14,16 @@ export const ImagePreview: FunctionComponent<{
     ("naturalHeight" in image ? image.naturalHeight : image.height) /
     downResFactor;
   useEffect(() => {
-    if (contextRef.current)
-      contextRef.current.drawImage(image, 0, 0, width, height);
+    if (!contextRef.current) return;
+    contextRef.current.canvas.width = width;
+    contextRef.current.canvas.height = height;
+    contextRef.current.clearRect(0, 0, width, height);
+    contextRef.current.drawImage(image, 0, 0, width, height);
   }, [image, width, height]);
 
   return (
     <canvas
       className="image-preview alpha-bg"
-      width={width}
-      height={height}
       ref={(canvas) => {
         if (contextRef.current?.canvas === canvas) return;
         contextRef.current = canvas?.getContext("2d") ?? null;
