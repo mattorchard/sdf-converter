@@ -2,21 +2,27 @@
   display: grid;
   height: 100vh;
   overflow: hidden;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: max-content minmax(0, 1fr) minmax(0, 1fr);
   grid-gap: 2rem;
-  padding: 2rem;
+  padding: 4rem;
+  align-items: flex-start;
 }
 .section-pane {
   backdrop-filter: blur(5px);
   background-color: var(--color-current-light);
   border-radius: 1rem;
-  padding: 1rem;
+  padding: 1rem 1rem 2rem;
   border: 0.5rem solid var(--color-current-dark);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
 .section-pane > h2 {
-  font-weight: unset;
   font-size: 2rem;
+  margin-bottom: 1rem;
+  color: rgba(20, 20, 20, 0.8);
+}
+.nis-description {
+  font-size: 1.25rem;
+  text-align: center;
 }

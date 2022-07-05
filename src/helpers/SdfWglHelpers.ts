@@ -19,13 +19,38 @@ function createContext(size: Size, type: "webgl2") {
   return context;
 }
 
-interface SdfOptions {
+export interface SdfOptions {
   upResFactor: number;
   alphaThreshold: number;
   spread: number;
 }
 
+let lastSdfId = 1;
+const createSdfId = () => {
+  lastSdfId += 1;
+  return lastSdfId;
+};
+
 export const createSdf = (
+  source: HTMLImageElement,
+  options: SdfOptions
+): HTMLCanvasElement => {
+  const sdfId = createSdfId();
+  const timerId = `Creating SDF "${sdfId}"`;
+  try {
+    console.debug(timerId, options);
+    console.time(timerId);
+    const output = createSdfInternal(source, options);
+    return output;
+  } catch (error) {
+    console.error(`Failed to create SDF "${sdfId}"`);
+    throw error;
+  } finally {
+    console.timeEnd(timerId);
+  }
+};
+
+const createSdfInternal = (
   source: HTMLImageElement,
   options: SdfOptions
 ): HTMLCanvasElement => {

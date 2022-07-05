@@ -1,2 +1,36 @@
 .button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25em 0.875em 0.5em;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  font-variant: all-small-caps;
+  position: relative;
+  box-shadow: var(--cartoon-box-shadow);
+  background-color: var(--color-current-dark);
+  color: snow;
+  font-size: 2rem;
+  transition-timing-function: ease-in-out;
+  transition-duration: 0.3s;
+  transition-property: filter, transform;
+}
+.button:hover {
+  filter: brightness(1.1);
+}
+.button:active {
+  filter: brightness(0.95);
+  transform: translate(0.0625rem, 0.125rem);
+}
+
+.button::before {
+  content: "";
+  position: absolute;
+  top: 0.375em;
+  left: 0.375em;
+  width: 0.25em;
+  height: 0.25em;
+  background-color: rgba(240, 240, 240, 0.5);
+  border-radius: 50%;
 }

@@ -10,6 +10,10 @@
 
   --color-darken: rgba(20, 20, 20, 0.2);
   --color-lighten: rgba(220, 220, 220, 0.2);
+  --pill: 1000px;
+  --cartoon-box-shadow: 0.125em 0.125em 0 rgba(20, 20, 20, 0.4),
+    inset -0.125em -0.125em 0 rgba(20, 20, 20, 0.1),
+    inset -0.0625em -0.0625em 0 rgba(20, 20, 20, 0.1);
 }
 html {
   font-size: 16px;
@@ -18,7 +22,7 @@ html,
 body {
   height: 100%;
   width: 100%;
-  font-family: "Helvetica Neue", arial, sans-serif;
+  font-family: "Lato", "Helvetica Neue", arial, sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -37,6 +41,7 @@ body {
   border: unset;
   font-size: 1rem;
   line-height: 1;
+  font-family: inherit;
 }
 
 .pink {
@@ -74,4 +79,10 @@ body {
   border-radius: 4px;
 }
 ::-webkit-scrollbar-track {
+}
+
+.alpha-bg {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAVSURBVBhXY9i/f/////8ZgfjAgQMASUcKedUZzlAAAAAASUVORK5CYII=");
+  image-rendering: pixelated;
+  background-size: 16px;
 }
