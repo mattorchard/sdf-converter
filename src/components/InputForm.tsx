@@ -6,6 +6,8 @@ import Box from "./Box";
 import { Button } from "./Button";
 import "./InputForm.css";
 
+const colorPattern = "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$";
+
 interface InputFormProps {
   images: HTMLImageElement[];
   options: SdfOptions;
@@ -63,6 +65,8 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
             min={1}
             max={128}
             step="1"
+            required
+            placeholder="e.g. 10"
             defaultValue={options.spread.toString()}
             onChange={(e) => {
               const spread = parseInt(e.currentTarget.value);
@@ -81,6 +85,8 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
             min="1"
             max="255"
             step="1"
+            required
+            placeholder="e.g. 128"
             defaultValue={options.alphaThreshold.toString()}
             onChange={(e) => {
               const alphaThreshold = parseInt(e.currentTarget.value);
@@ -100,6 +106,8 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
             min="1"
             max="4"
             step="1"
+            required
+            placeholder="e.g. 2"
             defaultValue={options.upResFactor.toString()}
             onChange={(e) => {
               const upResFactor = parseInt(e.currentTarget.value);
@@ -109,6 +117,42 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
           />
         }
         description="How much to upscale the image during calculations"
+      />
+
+      <FormControl
+        labelText="In Color"
+        input={
+          <input
+            type="text"
+            placeholder="e.g.  #000000"
+            pattern={colorPattern}
+            defaultValue={options.inColor}
+            onChange={(e) => {
+              const inColor = e.currentTarget.value;
+              if (!new RegExp(colorPattern).test(inColor)) return;
+              handleOptionChange({ inColor });
+            }}
+          />
+        }
+        description="Color to use inside the shape"
+      />
+
+      <FormControl
+        labelText="Out Color"
+        input={
+          <input
+            type="text"
+            placeholder="e.g.  #000000"
+            pattern={colorPattern}
+            defaultValue={options.outColor}
+            onChange={(e) => {
+              const outColor = e.currentTarget.value;
+              if (!new RegExp(colorPattern).test(outColor)) return;
+              handleOptionChange({ outColor });
+            }}
+          />
+        }
+        description="Color to use outside the shape"
       />
     </form>
   );

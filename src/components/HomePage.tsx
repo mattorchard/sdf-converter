@@ -9,6 +9,8 @@ const defaultOptions: SdfOptions = {
   upResFactor: 2,
   spread: 10,
   alphaThreshold: 128,
+  inColor: "#000000FF",
+  outColor: "#00000000",
 };
 
 export const HomePage: FunctionComponent = () => {

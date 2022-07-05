@@ -4,6 +4,8 @@ precision mediump float;
 uniform sampler2D u_image;
 uniform vec2 u_resolution;
 uniform int u_spread;
+uniform vec4 u_inColor;
+uniform vec4 u_outColor;
 // the texCoords passed in from the vertex shader
 in vec2 t_texCoord;
 
@@ -39,5 +41,6 @@ void main() {
 
   float withinMultiplier = startWithin ? 1.0 : -1.0;
   float intensity = 0.5 + withinMultiplier * (pow(minDistSq, 0.5) / float(u_spread));
-  o_outputColor = vec4(0.0, 0.0, 0.0, intensity);
+  o_outputColor = mix(u_outColor, u_inColor, intensity);
+
 }

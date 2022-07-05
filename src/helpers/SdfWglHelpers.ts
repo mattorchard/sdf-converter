@@ -19,10 +19,33 @@ function createContext(size: Size, type: "webgl2") {
   return context;
 }
 
+const hexToFloat = (hex: string) => {
+  const divisor = parseInt(hex, 16);
+  if (!divisor) return 0;
+  return 256 / divisor;
+};
+
+const colorAs4f = (color: string) => {
+  if (!/^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$/.test(color))
+    throw new Error(`Invalid color" ${color}"`);
+  const red = color.substring(1, 3);
+  const green = color.substring(3, 5);
+  const blue = color.substring(5, 7);
+  const alpha = color.substring(7, 9) || "FF";
+  return [
+    hexToFloat(red),
+    hexToFloat(green),
+    hexToFloat(blue),
+    hexToFloat(alpha),
+  ] as const;
+};
+
 export interface SdfOptions {
   upResFactor: number;
   alphaThreshold: number;
   spread: number;
+  inColor: string;
+  outColor: string;
 }
 
 let lastSdfId = 1;
@@ -182,10 +205,22 @@ const createSdfInternal = (
   applyFloatBuffer(positionLocation, positionBuffer, 2);
   applyFloatBuffer(texcoordLocation, texcoordBuffer, 2);
 
-  const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
-  gl.uniform2f(resolutionLocation, size.width, size.height);
-  const spreadLocation = gl.getUniformLocation(program, "u_spread");
-  gl.uniform1i(spreadLocation, options.spread);
+  gl.uniform2f(
+    gl.getUniformLocation(program, "u_resolution"),
+    size.width,
+    size.height
+  );
+
+  gl.uniform1i(gl.getUniformLocation(program, "u_spread"), options.spread);
+
+  gl.uniform4f(
+    gl.getUniformLocation(program, "u_inColor"),
+    ...colorAs4f(options.inColor)
+  );
+  gl.uniform4f(
+    gl.getUniformLocation(program, "u_outColor"),
+    ...colorAs4f(options.outColor)
+  );
 
   gl.drawArrays(gl.TRIANGLES, 0, 3 * 2);
 
