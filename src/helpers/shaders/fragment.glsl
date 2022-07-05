@@ -39,5 +39,5 @@ void main() {
 
   float withinMultiplier = startWithin ? 1.0 : -1.0;
   float intensity = 0.5 + withinMultiplier * (pow(minDistSq, 0.5) / float(u_spread));
-  o_outputColor = vec4(intensity, intensity, intensity, 1.0);
+  o_outputColor = vec4(0.0, 0.0, 0.0, intensity);
 }
