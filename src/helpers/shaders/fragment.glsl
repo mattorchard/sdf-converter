@@ -11,28 +11,30 @@ in vec2 t_texCoord;
 
 out vec4 o_outputColor;
 
+bool isWithinShape(vec2 position);
+bool isWithinShape(vec2 position) {
+  return texture(u_image, position).a >= 0.5;
+}
+
 void main() {
-  float maxDistance = float(u_spread);
-  float maxDistanceSquared = pow(maxDistance, 2.0);
-
-  bool isStartWithinShape = texture(u_image, t_texCoord).a >= 0.5; 
-
+  bool isStartWithinShape = isWithinShape(t_texCoord);
+  float maxDistanceSquared = pow(float(u_spread), 2.0);
   float minDistanceSquared = float(maxDistanceSquared);
+
   for (int xOffset = -u_spread; xOffset <= u_spread; xOffset++) {
     for (int yOffset = -u_spread; yOffset <= u_spread; yOffset++) {
       vec2 pixelOffset = vec2(xOffset, yOffset);
       vec2 searchPosition = t_texCoord + (pixelOffset / u_resolution);
-      bool isWithinShape = texture(u_image, searchPosition).a >= 0.5;
 
       // Not an edge, so can be ignored
-      if (isWithinShape == isStartWithinShape) { continue; }
+      if (isWithinShape(searchPosition) == isStartWithinShape) { continue; }
 
       float distanceSquared = pow(pixelOffset.x, 2.0) + pow(pixelOffset.y, 2.0);
       minDistanceSquared = min(minDistanceSquared, distanceSquared);
     }
   }
 
-  float distanceRatio = (pow(minDistanceSquared, 0.5) / float(u_spread));
+  float distanceRatio = sqrt(minDistanceSquared) / float(u_spread);
   float withinPolarity = isStartWithinShape ? 1.0 : -1.0;
   float intensity = 0.5 + withinPolarity * distanceRatio;
   o_outputColor = mix(u_outColor, u_inColor, intensity);
