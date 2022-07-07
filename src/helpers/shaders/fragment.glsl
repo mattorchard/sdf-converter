@@ -6,41 +6,34 @@ uniform vec2 u_resolution;
 uniform int u_spread;
 uniform vec4 u_inColor;
 uniform vec4 u_outColor;
-// the texCoords passed in from the vertex shader
+
 in vec2 t_texCoord;
-
-
-
 
 out vec4 o_outputColor;
 
 void main() {
-  vec2 onePixel = vec2(1.0, 1.0) / u_resolution;  
-  float maxDist = float(u_spread);
-  float maxDistSq = pow(maxDist, 2.0);
-  
+  float maxDistance = float(u_spread);
+  float maxDistanceSquared = pow(maxDistance, 2.0);
 
-  bool startWithin = texture(u_image, t_texCoord).a >= 0.5;
-   
-  float minDistSq = float(maxDistSq);
+  bool isStartWithinShape = texture(u_image, t_texCoord).a >= 0.5; 
 
-  
+  float minDistanceSquared = float(maxDistanceSquared);
   for (int xOffset = -u_spread; xOffset <= u_spread; xOffset++) {
     for (int yOffset = -u_spread; yOffset <= u_spread; yOffset++) {
       vec2 pixelOffset = vec2(xOffset, yOffset);
-      vec2 pos = t_texCoord + (pixelOffset * onePixel);
-      bool within = texture(u_image, pos).a >= 0.5;
+      vec2 searchPosition = t_texCoord + (pixelOffset / u_resolution);
+      bool isWithinShape = texture(u_image, searchPosition).a >= 0.5;
 
-      // Matching bit, no use
-      if (within == startWithin) { continue; }
+      // Not an edge, so can be ignored
+      if (isWithinShape == isStartWithinShape) { continue; }
 
-      float distSq = pow(pixelOffset.x, 2.0) + pow(pixelOffset.y, 2.0);
-      minDistSq = min(minDistSq, distSq);
+      float distanceSquared = pow(pixelOffset.x, 2.0) + pow(pixelOffset.y, 2.0);
+      minDistanceSquared = min(minDistanceSquared, distanceSquared);
     }
   }
 
-  float withinMultiplier = startWithin ? 1.0 : -1.0;
-  float intensity = 0.5 + withinMultiplier * (pow(minDistSq, 0.5) / float(u_spread));
+  float distanceRatio = (pow(minDistanceSquared, 0.5) / float(u_spread));
+  float withinPolarity = isStartWithinShape ? 1.0 : -1.0;
+  float intensity = 0.5 + withinPolarity * distanceRatio;
   o_outputColor = mix(u_outColor, u_inColor, intensity);
-
 }
