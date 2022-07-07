@@ -34,7 +34,7 @@ void main() {
     }
   }
 
-  float distanceRatio = sqrt(minDistanceSquared) / float(u_spread);
+  float distanceRatio = (sqrt(minDistanceSquared) - 0.5) / float(u_spread);
   float withinPolarity = isStartWithinShape ? 1.0 : -1.0;
   float intensity = 0.5 + withinPolarity * distanceRatio;
   o_outputColor = mix(u_outColor, u_inColor, intensity);
