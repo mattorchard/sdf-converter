@@ -3,7 +3,7 @@
   --color-text: #020212;
   --color-pink-dark: #f45690;
   --color-pink-light: #f5a3f8;
-  --color-blue-dark: #6dceff;
+  --color-blue-dark: #6dbaff;
   --color-blue-light: #76f1ef;
   --color-yellow-light: #f7e7a3;
   --color-yellow-dark: #f69e36;
@@ -82,6 +82,9 @@ body {
 
 ::-webkit-scrollbar-button {
   height: 4px;
+}
+::-webkit-scrollbar-corner {
+  background: none;
 }
 
 .alpha-bg {

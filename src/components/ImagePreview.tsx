@@ -5,7 +5,8 @@ import "./ImagePreview.css";
 export const ImagePreview: FunctionComponent<{
   image: HTMLImageElement | HTMLCanvasElement;
   downResFactor?: number;
-}> = ({ image, downResFactor = 1 }) => {
+  title?: string
+}> = ({ image, title, downResFactor = 1 }) => {
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const width =
     ("naturalWidth" in image ? image.naturalWidth : image.width) /
@@ -23,6 +24,7 @@ export const ImagePreview: FunctionComponent<{
 
   return (
     <canvas
+      title={title}
       className="image-preview alpha-bg cartoon cartoon--color"
       ref={(canvas) => {
         if (contextRef.current?.canvas === canvas) return;
