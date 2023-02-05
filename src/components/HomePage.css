@@ -16,6 +16,8 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
+  max-height: 100%;
 }
 .section-pane > h2 {
   font-size: 2rem;
