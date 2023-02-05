@@ -8,18 +8,12 @@ import { Button } from "./Button";
 import { NamedCanvas, NamedImage } from "../helpers/UtilTypes";
 import { downloadUrl, removeExtension } from "../helpers/FileHelpers";
 import Box from "./Box";
+import { useOptions } from "../hooks/useOptions";
 
-const defaultOptions: SdfOptions = {
-  upResFactor: 2,
-  spread: 10,
-  alphaThreshold: 128,
-  inColor: "#000000FF",
-  outColor: "#00000000",
-};
 
 export const HomePage: FunctionComponent = () => {
   const [inputImages, setImages] = useState<NamedImage[]>([]);
-  const [options, setOptions] = useState(defaultOptions);
+  const [options, setOptions] = useOptions();
 
   const [sdfImages, setSdfImages] = useState<NamedCanvas[]>([]);
 

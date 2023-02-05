@@ -6,13 +6,18 @@ type BaseButtonProps = JSX.DetailedHTMLProps<
   HTMLButtonElement
 >;
 
-export const Button: FunctionComponent<BaseButtonProps> = ({
+interface ButtonProps extends Omit<BaseButtonProps, "size"> {
+  size?: "large" | "small"
+};
+
+export const Button: FunctionComponent<ButtonProps> = ({
   className,
   children,
+  size = "large",
   type = "button",
   ...props
 }) => (
-  <button {...props} type={type} className={`${className} button`}>
+  <button {...props} type={type} className={`${className} button button--${size}`}>
     {children}
   </button>
 );

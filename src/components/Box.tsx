@@ -14,6 +14,7 @@ export interface BoxProps {
   alignItems?: JSX.CSSProperties["alignItems"];
   justifyContent?: JSX.CSSProperties["justifyContent"];
   flexDirection?: JSX.CSSProperties["flexDirection"];
+  gap?: JSX.CSSProperties["gap"];
   inline?: boolean;
   p?: PaddingType;
   px?: PaddingType;
@@ -51,6 +52,7 @@ const Box: FunctionComponent<BoxProps & DivProps> = ({
   mr,
   mb,
   ml,
+  gap,
   inline,
   flexDirection,
   alignItems,
@@ -69,6 +71,7 @@ const Box: FunctionComponent<BoxProps & DivProps> = ({
     paddingRight: numericsAsRem(pr ?? px ?? p),
     paddingBottom: numericsAsRem(pb ?? py ?? p),
     paddingLeft: numericsAsRem(pl ?? px ?? p),
+    gap: numericsAsRem(gap),
     display: inline ? "inline-flex" : "flex",
     flexDirection,
     alignItems,

@@ -15,3 +15,9 @@ export type JsxNode =
   | boolean
   | null
   | undefined;
+
+export type PickOfValues<Base, Desired> = {
+  [key in keyof Base as Base[key] extends Desired ? key : never]: Base[key];
+};
+
+export type KeysOfValues<Base, Desired> = keyof PickOfValues<Base, Desired>;

@@ -30,4 +30,5 @@
 
 .form-group__label input:invalid {
   color: crimson;
+  text-decoration: underline;
 }

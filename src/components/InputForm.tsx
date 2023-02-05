@@ -1,13 +1,12 @@
 import { FunctionComponent, JSX } from "preact";
 import { useState } from "preact/hooks";
+import { colorPattern, isValidColor } from "../helpers/ColorHelpers";
 import { loadImage } from "../helpers/ImageHelpers";
 import { SdfOptions } from "../helpers/SdfWglHelpers";
 import { NamedImage } from "../helpers/UtilTypes";
 import Box from "./Box";
 import { Button } from "./Button";
 import "./InputForm.css";
-
-const colorPattern = "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$";
 
 interface InputFormProps {
   options: SdfOptions;
@@ -129,12 +128,12 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
         input={
           <input
             type="text"
-            placeholder="e.g.  #000000"
+            placeholder="e.g. #000000"
             pattern={colorPattern}
             defaultValue={options.inColor}
             onChange={(e) => {
               const inColor = e.currentTarget.value;
-              if (!new RegExp(colorPattern).test(inColor)) return;
+              if (!isValidColor(inColor)) return;
               handleOptionChange({ inColor });
             }}
           />
@@ -147,12 +146,12 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
         input={
           <input
             type="text"
-            placeholder="e.g.  #000000"
+            placeholder="e.g. #000000"
             pattern={colorPattern}
             defaultValue={options.outColor}
             onChange={(e) => {
               const outColor = e.currentTarget.value;
-              if (!new RegExp(colorPattern).test(outColor)) return;
+              if (!isValidColor(outColor)) return;
               handleOptionChange({ outColor });
             }}
           />

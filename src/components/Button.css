@@ -1,8 +1,6 @@
 .button {
   display: inline-flex;
   align-items: center;
-  padding: 0.25em 0.875em 0.5em;
-  border-radius: 0.5rem;
   cursor: pointer;
   user-select: none;
   position: relative;
@@ -11,10 +9,17 @@
   box-shadow: var(--cartoon-box-shadow);
   background-color: var(--color-current-dark);
   color: snow;
-  font-size: 2rem;
   transition-timing-function: ease-in-out;
   transition-duration: 0.3s;
   transition-property: filter, transform;
+  padding: 0.25em 0.875em 0.5em;
+  border-radius: 0.5rem;
+}
+.button--large {
+  font-size: 2rem;
+}
+.button--small {
+  font-size: 1.25rem;
 }
 .button:hover {
   filter: brightness(1.1);
