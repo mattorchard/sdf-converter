@@ -23,7 +23,7 @@ export const ImagePreview: FunctionComponent<{
 
   return (
     <canvas
-      className="image-preview alpha-bg"
+      className="image-preview alpha-bg cartoon cartoon--color"
       ref={(canvas) => {
         if (contextRef.current?.canvas === canvas) return;
         contextRef.current = canvas?.getContext("2d") ?? null;

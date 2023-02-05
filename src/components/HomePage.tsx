@@ -14,21 +14,24 @@ import { useOptions } from "../hooks/useOptions";
 export const HomePage: FunctionComponent = () => {
   const [inputImages, setImages] = useState<NamedImage[]>([]);
   const [options, setOptions] = useOptions();
+  const [isOptionsValid, setIsOptionsValid] = useState(true);
 
   const [sdfImages, setSdfImages] = useState<NamedCanvas[]>([]);
 
   useEffect(() => {
     let isCancelled = false;
     setSdfImages([]);
-    inputImages.forEach(async ({ name, image }) => {
-      const sdf = await createSdf(image, options);
-      if (isCancelled) return;
-      setSdfImages((i) => [...i, { name, canvas: sdf }]);
-    });
+    if (isOptionsValid) {
+      inputImages.forEach(async ({ name, image }) => {
+        const sdf = await createSdf(image, options);
+        if (isCancelled) return;
+        setSdfImages((i) => [...i, { name, canvas: sdf }]);
+      });
+    }
     return () => {
       isCancelled = true;
     };
-  }, [inputImages, options]);
+  }, [inputImages, options, isOptionsValid]);
 
   const handleDownloadAll = useCallback(() =>
     sdfImages.forEach(({ canvas, name }) => {
@@ -47,13 +50,16 @@ export const HomePage: FunctionComponent = () => {
             options={options}
             onImagesChange={setImages}
             onOptionsChange={setOptions}
+            onValidityChange={setIsOptionsValid}
           />
         </SectionPane>
 
         <SectionPane title="Before" color="yellow">
-          {inputImages.map(({ image }) => (
-            <ImagePreview image={image} />
-          ))}
+          <Box flexDirection="column" gap={2}>
+            {inputImages.map(({ image }) => (
+              <ImagePreview image={image} />
+            ))}
+          </Box>
           {inputImages.length === 0 && (
             <p className="nis-description">Input images will appear here</p>
           )}
@@ -65,9 +71,11 @@ export const HomePage: FunctionComponent = () => {
               <Button onClick={handleDownloadAll}>Download all</Button>
             </Box>
           }
-          {sdfImages.map(({ canvas }) => (
-            <ImagePreview image={canvas} downResFactor={options.upResFactor} />
-          ))}
+          <Box flexDirection="column" gap={2}>
+            {sdfImages.map(({ canvas }) => (
+              <ImagePreview image={canvas} downResFactor={options.upResFactor} />
+            ))}
+          </Box>
           {sdfImages.length === 0 && (
             <p className="nis-description">Output images will appear here</p>
           )}

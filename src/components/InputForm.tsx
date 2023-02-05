@@ -12,12 +12,14 @@ interface InputFormProps {
   options: SdfOptions;
   onImagesChange: (images: NamedImage[]) => void;
   onOptionsChange: (options: SdfOptions) => void;
+  onValidityChange: (isValid: boolean) => void;
 }
 
 export const InputForm: FunctionComponent<InputFormProps> = ({
   options,
   onImagesChange,
   onOptionsChange,
+  onValidityChange
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -54,7 +56,11 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
     onOptionsChange({ ...options, ...newOptions });
 
   return (
-    <form className="input-form">
+    <form
+      className="input-form"
+      onSubmit={e => e.preventDefault()}
+      onChange={e => onValidityChange(e.currentTarget.checkValidity())}>
+
       <Box>
         <Button onClick={handlePickFiles} disabled={isLoading}>
           {isLoading ? "Loading" : "Pick Images"}
@@ -64,19 +70,13 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
       <FormControl
         labelText="Spread"
         input={
-          <input
-            type="number"
+          <NumberInput
             min={1}
             max={128}
-            step="1"
-            required
+            step={1}
             placeholder="e.g. 10"
-            defaultValue={options.spread.toString()}
-            onChange={(e) => {
-              const spread = parseInt(e.currentTarget.value);
-              if (!spread) return;
-              handleOptionChange({ spread });
-            }}
+            defaultValue={options.spread}
+            onChange={(spread) => handleOptionChange({ spread })}
           />
         }
         description="Distance between an edge and the background "
@@ -84,19 +84,13 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
       <FormControl
         labelText="Alpha Threshold"
         input={
-          <input
-            type="number"
-            min="1"
-            max="255"
-            step="1"
-            required
+          <NumberInput
+            min={1}
+            max={255}
+            step={1}
             placeholder="e.g. 128"
-            defaultValue={options.alphaThreshold.toString()}
-            onChange={(e) => {
-              const alphaThreshold = parseInt(e.currentTarget.value);
-              if (!alphaThreshold) return;
-              handleOptionChange({ alphaThreshold });
-            }}
+            defaultValue={options.alphaThreshold}
+            onChange={(alphaThreshold) => handleOptionChange({ alphaThreshold })}
           />
         }
         description="At what transparency level is a pixel enabled"
@@ -105,19 +99,13 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
       <FormControl
         labelText="Up Res Factor"
         input={
-          <input
-            type="number"
-            min="1"
-            max="4"
-            step="1"
-            required
+          <NumberInput
+            min={1}
+            max={4}
+            step={1}
             placeholder="e.g. 2"
-            defaultValue={options.upResFactor.toString()}
-            onChange={(e) => {
-              const upResFactor = parseInt(e.currentTarget.value);
-              if (!upResFactor) return;
-              handleOptionChange({ upResFactor });
-            }}
+            defaultValue={options.upResFactor}
+            onChange={(upResFactor) => handleOptionChange({ upResFactor })}
           />
         }
         description="How much to upscale the image during calculations"
@@ -136,6 +124,7 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
               if (!isValidColor(inColor)) return;
               handleOptionChange({ inColor });
             }}
+            className="cartoon"
           />
         }
         description="Color to use inside the shape"
@@ -154,6 +143,7 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
               if (!isValidColor(outColor)) return;
               handleOptionChange({ outColor });
             }}
+            className="cartoon"
           />
         }
         description="Color to use outside the shape"
@@ -175,3 +165,35 @@ const FormControl: FunctionComponent<{
     <p className="form-group__description">{description}</p>
   </div>
 );
+
+
+const NumberInput: FunctionComponent<{
+  min: number,
+  max: number,
+  step: number,
+  placeholder: string,
+  defaultValue: number,
+  onChange: (value: number) => void
+}> = ({
+  min,
+  max,
+  step,
+  placeholder,
+  defaultValue,
+  onChange,
+}) => <input
+      type="number"
+      min={min}
+      max={max}
+      step={step}
+      placeholder={placeholder}
+      defaultValue={defaultValue.toString()}
+      required
+      onChange={(e) => {
+        if (!e.currentTarget.validity.valid) return;
+        const value = Number(e.currentTarget.value);
+        if (isNaN(value)) return;
+        onChange(value)
+      }}
+      className="cartoon"
+    />

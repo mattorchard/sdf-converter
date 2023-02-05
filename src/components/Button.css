@@ -6,14 +6,13 @@
   position: relative;
   font-variant: all-small-caps;
   position: relative;
-  box-shadow: var(--cartoon-box-shadow);
   background-color: var(--color-current-dark);
   color: snow;
   transition-timing-function: ease-in-out;
   transition-duration: 0.3s;
   transition-property: filter, transform;
   padding: 0.25em 0.875em 0.5em;
-  border-radius: 0.5rem;
+  font-weight: bold;
 }
 .button--large {
   font-size: 2rem;
