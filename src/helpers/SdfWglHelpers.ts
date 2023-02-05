@@ -16,7 +16,7 @@ function createContext(size: Size, type: "webgl2") {
   canvas.height = size.height;
   const context = canvas.getContext(type);
   if (!context) throw new Error(`Unable to create canvas context`);
-  return context;
+  return [context, canvas] as const;
 }
 
 const hexToFloat = (hex: string) => {
@@ -81,7 +81,7 @@ const createSdfInternal = (
     width: source.naturalWidth * options.upResFactor,
     height: source.naturalHeight * options.upResFactor,
   };
-  const gl = createContext(size, "webgl2");
+  const [gl, canvas] = createContext(size, "webgl2");
 
   const buildShader = (type: GLenum, source: string) => {
     const shader = gl.createShader(type);
@@ -224,5 +224,5 @@ const createSdfInternal = (
 
   gl.drawArrays(gl.TRIANGLES, 0, 3 * 2);
 
-  return gl.canvas;
+  return canvas;
 };
