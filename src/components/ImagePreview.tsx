@@ -4,16 +4,13 @@ import "./ImagePreview.css";
 
 export const ImagePreview: FunctionComponent<{
   image: HTMLImageElement | HTMLCanvasElement;
-  downResFactor?: number;
   title?: string
-}> = ({ image, title, downResFactor = 1 }) => {
+}> = ({ image, title, }) => {
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const width =
-    ("naturalWidth" in image ? image.naturalWidth : image.width) /
-    downResFactor;
+    ("naturalWidth" in image ? image.naturalWidth : image.width);
   const height =
-    ("naturalHeight" in image ? image.naturalHeight : image.height) /
-    downResFactor;
+    ("naturalHeight" in image ? image.naturalHeight : image.height);
   useEffect(() => {
     if (!contextRef.current) return;
     contextRef.current.canvas.width = width;

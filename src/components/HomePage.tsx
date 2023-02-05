@@ -56,8 +56,8 @@ export const HomePage: FunctionComponent = () => {
 
         <SectionPane title="Before" color="yellow">
           <Box flexDirection="column" gap={2}>
-            {inputImages.map(({ image }) => (
-              <ImagePreview image={image} />
+            {inputImages.map(({ image, name }) => (
+              <ImagePreview image={image} title={name} />
             ))}
           </Box>
           {inputImages.length === 0 && (
@@ -72,8 +72,8 @@ export const HomePage: FunctionComponent = () => {
             </Box>
           }
           <Box flexDirection="column" gap={2}>
-            {sdfImages.map(({ canvas }) => (
-              <ImagePreview image={canvas} downResFactor={options.upResFactor} />
+            {sdfImages.map(({ canvas, name }) => (
+              <ImagePreview image={canvas} title={name} />
             ))}
           </Box>
           {sdfImages.length === 0 && (

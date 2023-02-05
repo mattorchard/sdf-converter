@@ -10,7 +10,15 @@ interface Size {
   height: number;
 }
 
-function createContext(size: Size, type: "webgl2") {
+function createContext(
+  size: Size,
+  type: "2d"
+): [CanvasRenderingContext2D, HTMLCanvasElement];
+function createContext(
+  size: Size,
+  type: "webgl2"
+): [WebGL2RenderingContext, HTMLCanvasElement];
+function createContext(size: Size, type: "webgl2" | "2d") {
   const canvas = document.createElement("canvas");
   canvas.width = size.width;
   canvas.height = size.height;
@@ -71,6 +79,19 @@ export const createSdf = (
   } finally {
     console.timeEnd(timerId);
   }
+};
+
+const downRes = (
+  sourceCanvas: HTMLCanvasElement,
+  factor: number
+): HTMLCanvasElement => {
+  const newSize = {
+    width: sourceCanvas.width / factor,
+    height: sourceCanvas.height / factor,
+  };
+  const [context, transformedCanvas] = createContext(newSize, "2d");
+  context.drawImage(sourceCanvas, 0, 0, newSize.width, newSize.height);
+  return transformedCanvas;
 };
 
 const createSdfInternal = (
@@ -224,5 +245,5 @@ const createSdfInternal = (
 
   gl.drawArrays(gl.TRIANGLES, 0, 3 * 2);
 
-  return canvas;
+  return downRes(canvas, options.upResFactor);
 };
