@@ -1,11 +1,17 @@
-export type NamedImage = {
-  image: HTMLImageElement;
+export type ImageMetadata = {
   name: string;
+  width: number;
+  height: number;
 };
 
-export type NamedCanvas = {
+export type InputImage = {
+  image: HTMLImageElement;
+  metadata: ImageMetadata;
+};
+
+export type OutputCanvas = {
   canvas: HTMLCanvasElement;
-  name: string;
+  metadata: ImageMetadata;
 };
 
 export type JsxNode =

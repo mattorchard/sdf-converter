@@ -5,27 +5,27 @@ import { ImagePreview } from "./ImagePreview";
 import { InputForm } from "./InputForm";
 import "./HomePage.css";
 import { Button } from "./Button";
-import { NamedCanvas, NamedImage } from "../helpers/UtilTypes";
+import { OutputCanvas, InputImage } from "../helpers/UtilTypes";
 import { downloadUrl, removeExtension } from "../helpers/FileHelpers";
 import Box from "./Box";
 import { useOptions } from "../hooks/useOptions";
 
 
 export const HomePage: FunctionComponent = () => {
-  const [inputImages, setImages] = useState<NamedImage[]>([]);
+  const [inputImages, setImages] = useState<InputImage[]>([]);
   const [options, setOptions] = useOptions();
   const [isOptionsValid, setIsOptionsValid] = useState(true);
 
-  const [sdfImages, setSdfImages] = useState<NamedCanvas[]>([]);
+  const [sdfImages, setSdfImages] = useState<OutputCanvas[]>([]);
 
   useEffect(() => {
     let isCancelled = false;
     setSdfImages([]);
     if (isOptionsValid) {
-      inputImages.forEach(async ({ name, image }) => {
-        const sdf = await createSdf(image, options);
+      inputImages.forEach(async (inputImage) => {
+        const sdf = await createSdf(inputImage, options);
         if (isCancelled) return;
-        setSdfImages((i) => [...i, { name, canvas: sdf }]);
+        setSdfImages((i) => [...i, { metadata: inputImage.metadata, canvas: sdf }]);
       });
     }
     return () => {
@@ -34,9 +34,9 @@ export const HomePage: FunctionComponent = () => {
   }, [inputImages, options, isOptionsValid]);
 
   const handleDownloadAll = useCallback(() =>
-    sdfImages.forEach(({ canvas, name }) => {
+    sdfImages.forEach(({ canvas, metadata }) => {
       const url = canvas.toDataURL("image/png");
-      const newName = `SDF_${removeExtension(name)}.png`;
+      const newName = `SDF_${removeExtension(metadata.name)}.png`;
       downloadUrl(url, newName);
     })
     , [sdfImages]);
@@ -56,8 +56,8 @@ export const HomePage: FunctionComponent = () => {
 
         <SectionPane title="Before" color="yellow">
           <Box flexDirection="column" gap={2}>
-            {inputImages.map(({ image, name }) => (
-              <ImagePreview image={image} title={name} />
+            {inputImages.map(({ image, metadata }) => (
+              <ImagePreview image={image} metadata={metadata} />
             ))}
           </Box>
           {inputImages.length === 0 && (
@@ -72,8 +72,8 @@ export const HomePage: FunctionComponent = () => {
             </Box>
           }
           <Box flexDirection="column" gap={2}>
-            {sdfImages.map(({ canvas, name }) => (
-              <ImagePreview image={canvas} title={name} />
+            {sdfImages.map(({ canvas, metadata }) => (
+              <ImagePreview image={canvas} metadata={metadata} />
             ))}
           </Box>
           {sdfImages.length === 0 && (

@@ -8,6 +8,8 @@ const defaultOptions: SdfOptions = {
   upResFactor: 2,
   spread: 10,
   alphaThreshold: 128,
+  svgWidth: 512,
+  svgHeight: 512,
   inColor: "#000000FF",
   outColor: "#00000000",
 };
@@ -29,6 +31,8 @@ const getInitialState = (): SdfOptions => {
     upResFactor: getNum("upResFactor"),
     spread: getNum("spread"),
     alphaThreshold: getNum("alphaThreshold"),
+    svgWidth: getNum("svgWidth"),
+    svgHeight: getNum("svgHeight"),
     inColor: getColor("inColor"),
     outColor: getColor("outColor"),
   };

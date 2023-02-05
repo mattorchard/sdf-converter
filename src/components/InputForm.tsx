@@ -1,16 +1,16 @@
-import { FunctionComponent, JSX } from "preact";
+import { Fragment, FunctionComponent, JSX } from "preact";
 import { useState } from "preact/hooks";
 import { colorPattern, isValidColor } from "../helpers/ColorHelpers";
 import { loadImage } from "../helpers/ImageHelpers";
 import { SdfOptions } from "../helpers/SdfWglHelpers";
-import { NamedImage } from "../helpers/UtilTypes";
+import { InputImage } from "../helpers/UtilTypes";
 import Box from "./Box";
 import { Button } from "./Button";
 import "./InputForm.css";
 
 interface InputFormProps {
   options: SdfOptions;
-  onImagesChange: (images: NamedImage[]) => void;
+  onImagesChange: (images: InputImage[]) => void;
   onOptionsChange: (options: SdfOptions) => void;
   onValidityChange: (isValid: boolean) => void;
 }
@@ -22,6 +22,7 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
   onValidityChange
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [showSvgSettings, setShowSvgSettings] = useState(false);
 
   const handlePickFiles = async () => {
     try {
@@ -32,7 +33,7 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
         types: [
           {
             accept: {
-              "image/*": [".png", ".gif"],
+              "image/*": [".png", ".gif", ".svg"],
             },
             description: "Image with transparency",
           },
@@ -41,9 +42,22 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
       const loadedImages = await Promise.all(
         fileHandles.map(async (handle) => {
           const file = await handle.getFile();
-          const image = await (loadImage(file));
-          const name = handle.name;
-          return { image, name }
+
+          const isSvg = file.type.includes("svg")
+          if (isSvg) setShowSvgSettings(true)
+
+          const image = await loadImage(file);
+          const metadata = {
+            name: handle.name,
+            width: isSvg ? options.svgWidth : image.naturalWidth,
+            height: isSvg ? options.svgHeight : image.naturalHeight
+          }
+          image.width = metadata.width;
+          image.height = metadata.height;
+          return {
+            image,
+            metadata,
+          }
         })
       );
       onImagesChange(loadedImages);
@@ -67,6 +81,37 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
         </Button>
       </Box>
 
+      {showSvgSettings && <Fragment>
+        <FormControl
+          labelText="SVG Output Width"
+          input={
+            <NumberInput
+              min={1}
+              max={16_500}
+              step={1}
+              placeholder="e.g. 500"
+              defaultValue={options.svgWidth}
+              onChange={(svgWidth) => handleOptionChange({ svgWidth })}
+            />
+          }
+          description="How wide to make SVGs in the final image"
+        />
+        <FormControl
+          labelText="SVG Output Height"
+          input={
+            <NumberInput
+              min={1}
+              max={16_500}
+              step={1}
+              placeholder="e.g. 500"
+              defaultValue={options.svgHeight}
+              onChange={(svgHeight) => handleOptionChange({ svgHeight })}
+            />
+          }
+          description="How tall to make SVGs in the final image"
+        />
+      </Fragment>}
+
       <FormControl
         labelText="Spread"
         input={
@@ -79,7 +124,7 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
             onChange={(spread) => handleOptionChange({ spread })}
           />
         }
-        description="Distance between an edge and the background "
+        description="Distance between an edge and the background"
       />
       <FormControl
         labelText="Alpha Threshold"

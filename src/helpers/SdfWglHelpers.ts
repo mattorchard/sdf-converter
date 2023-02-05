@@ -2,6 +2,7 @@
 import vertexShader from "./shaders/vertex.glsl";
 // @ts-ignore
 import fragmentShader from "./shaders/fragment.glsl";
+import { InputImage } from "./UtilTypes";
 
 type VecDimension = 1 | 2 | 3 | 4;
 
@@ -54,6 +55,8 @@ export interface SdfOptions {
   spread: number;
   inColor: string;
   outColor: string;
+  svgWidth: number;
+  svgHeight: number;
 }
 
 let lastSdfId = 1;
@@ -63,7 +66,7 @@ const createSdfId = () => {
 };
 
 export const createSdf = (
-  source: HTMLImageElement,
+  source: InputImage,
   options: SdfOptions
 ): HTMLCanvasElement => {
   const sdfId = createSdfId();
@@ -95,12 +98,12 @@ const downRes = (
 };
 
 const createSdfInternal = (
-  source: HTMLImageElement,
+  source: InputImage,
   options: SdfOptions
 ): HTMLCanvasElement => {
   const size = {
-    width: source.naturalWidth * options.upResFactor,
-    height: source.naturalHeight * options.upResFactor,
+    width: source.metadata.width * options.upResFactor,
+    height: source.metadata.height * options.upResFactor,
   };
   const [gl, canvas] = createContext(size, "webgl2");
 
@@ -221,7 +224,7 @@ const createSdfInternal = (
   gl.clear(gl.COLOR_BUFFER_BIT);
   gl.useProgram(program);
 
-  createTexture(source);
+  createTexture(source.image);
 
   applyFloatBuffer(positionLocation, positionBuffer, 2);
   applyFloatBuffer(texcoordLocation, texcoordBuffer, 2);
