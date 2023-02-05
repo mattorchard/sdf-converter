@@ -16,5 +16,3 @@ export const loadImageUrl = (url: string): Promise<HTMLImageElement> => {
   image.src = url;
   return promise;
 };
-
-export const getImageData = () => {};

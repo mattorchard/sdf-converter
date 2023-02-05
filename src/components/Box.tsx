@@ -31,6 +31,11 @@ export interface BoxProps {
   ml?: MarginType;
 }
 
+const numericsAsRem = (value: unknown) => {
+  if (typeof value === 'number') return `${value}rem`
+  return value;
+}
+
 const Box: FunctionComponent<BoxProps & DivProps> = ({
   p,
   px,
@@ -56,14 +61,14 @@ const Box: FunctionComponent<BoxProps & DivProps> = ({
   ...props
 }) => {
   const style = {
-    marginTop: mt ?? my ?? m,
-    marginRight: mr ?? mx ?? m,
-    marginBottom: mb ?? my ?? m,
-    marginLeft: ml ?? mx ?? m,
-    paddingTop: pt ?? py ?? p,
-    paddingRight: pr ?? px ?? p,
-    paddingBottom: pb ?? py ?? p,
-    paddingLeft: pl ?? px ?? p,
+    marginTop: numericsAsRem(mt ?? my ?? m),
+    marginRight: numericsAsRem(mr ?? mx ?? m),
+    marginBottom: numericsAsRem(mb ?? my ?? m),
+    marginLeft: numericsAsRem(ml ?? mx ?? m),
+    paddingTop: numericsAsRem(pt ?? py ?? p),
+    paddingRight: numericsAsRem(pr ?? px ?? p),
+    paddingBottom: numericsAsRem(pb ?? py ?? p),
+    paddingLeft: numericsAsRem(pl ?? px ?? p),
     display: inline ? "inline-flex" : "flex",
     flexDirection,
     alignItems,

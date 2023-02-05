@@ -1,5 +1,5 @@
 .input-form {
-  gap: 2rem;
+  gap: 1rem;
 }
 .input-form,
 .form-group,
@@ -26,7 +26,6 @@
 
 .form-group__description {
   font-size: 1rem;
-  margin-bottom: 0 0.5rem;
 }
 
 .form-group__label input:invalid {

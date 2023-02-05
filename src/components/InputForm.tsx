@@ -2,6 +2,7 @@ import { FunctionComponent, JSX } from "preact";
 import { useState } from "preact/hooks";
 import { loadImage } from "../helpers/ImageHelpers";
 import { SdfOptions } from "../helpers/SdfWglHelpers";
+import { NamedImage } from "../helpers/UtilTypes";
 import Box from "./Box";
 import { Button } from "./Button";
 import "./InputForm.css";
@@ -9,9 +10,8 @@ import "./InputForm.css";
 const colorPattern = "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$";
 
 interface InputFormProps {
-  images: HTMLImageElement[];
   options: SdfOptions;
-  onImagesChange: (images: HTMLImageElement[]) => void;
+  onImagesChange: (images: NamedImage[]) => void;
   onOptionsChange: (options: SdfOptions) => void;
 }
 
@@ -38,7 +38,12 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
         ],
       });
       const loadedImages = await Promise.all(
-        fileHandles.map((handle) => handle.getFile().then(loadImage))
+        fileHandles.map(async (handle) => {
+          const file = await handle.getFile();
+          const image = await (loadImage(file));
+          const name = handle.name;
+          return { image, name }
+        })
       );
       onImagesChange(loadedImages);
     } finally {

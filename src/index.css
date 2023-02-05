@@ -1,6 +1,6 @@
 :root {
   --color-background: #eeeeee;
-  --color-text: #020212;
+  --color-text: #020212d0;
   --color-pink-dark: #f45690;
   --color-pink-light: #f5a3f8;
   --color-blue-dark: #6dceff;
@@ -85,4 +85,13 @@ body {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAVSURBVBhXY9i/f/////8ZgfjAgQMASUcKedUZzlAAAAAASUVORK5CYII=");
   image-rendering: pixelated;
   background-size: 16px;
+}
+
+.nis-description {
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+h2 {
+  font-size: 2rem;
 }
