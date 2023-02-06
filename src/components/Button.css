@@ -9,7 +9,7 @@
   background-color: var(--color-current-dark);
   color: snow;
   transition-timing-function: ease-in-out;
-  transition-duration: 0.3s;
+  transition-duration: 0.2s;
   transition-property: filter, transform;
   padding: 0.25em 0.875em 0.5em;
   font-weight: bold;

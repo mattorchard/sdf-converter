@@ -1,6 +1,6 @@
 import { FunctionComponent } from "preact";
 import { useCallback, useEffect, useState } from "preact/hooks";
-import { createSdf, SdfOptions } from "../helpers/SdfWglHelpers";
+import { createSdf } from "../helpers/SdfWglHelpers";
 import { ImagePreview } from "./ImagePreview";
 import { InputForm } from "./InputForm";
 import "./HomePage.css";
@@ -9,6 +9,7 @@ import { OutputCanvas, InputImage } from "../helpers/UtilTypes";
 import { downloadUrl, removeExtension } from "../helpers/FileHelpers";
 import Box from "./Box";
 import { useOptions } from "../hooks/useOptions";
+import { inputNisIcon, outputNisIcon } from "./icons";
 
 
 export const HomePage: FunctionComponent = () => {
@@ -61,7 +62,11 @@ export const HomePage: FunctionComponent = () => {
             ))}
           </Box>
           {inputImages.length === 0 && (
-            <p className="nis-description">Input images will appear here</p>
+            <div className="nis">
+              {inputNisIcon}
+              <p className="nis__description">Input images will appear here</p>
+            </div>
+
           )}
         </SectionPane>
 
@@ -77,7 +82,10 @@ export const HomePage: FunctionComponent = () => {
             ))}
           </Box>
           {sdfImages.length === 0 && (
-            <p className="nis-description">Output images will appear here</p>
+            <div className="nis">
+              {outputNisIcon}
+              <p className="nis__description">Output images will appear here</p>
+            </div>
           )}
 
         </SectionPane>

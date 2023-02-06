@@ -92,8 +92,12 @@ body {
   image-rendering: pixelated;
   background-size: 16px;
 }
+.nis > svg {
+  color: var(--color-current-dark);
+  padding: 2rem;
+}
 
-.nis-description {
+.nis__description {
   font-size: 1.25rem;
   text-align: center;
 }
