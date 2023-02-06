@@ -25,8 +25,9 @@
   background-color: var(--color-current-light);
   border-radius: 1rem;
   padding: 1rem 1rem 2rem;
-  border: 0.25rem solid var(--color-current-dark);
-  box-shadow: 0.25rem 0.25rem 0 0.25rem var(--color-current-dark);
+  border: 0.1875rem solid black;
+  box-shadow: 0 0.75rem 0 -0.5rem var(--color-current-dark),
+    0 0.75rem 0 -0.3125rem black;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
