@@ -1,5 +1,5 @@
 import { Fragment, FunctionComponent, JSX } from "preact";
-import { useState } from "preact/hooks";
+import { useEffect, useMemo, useState } from "preact/hooks";
 import { loadImage } from "../helpers/ImageHelpers";
 import { SdfOptions } from "../helpers/SdfWglHelpers";
 import { InputImage } from "../helpers/UtilTypes";
@@ -11,6 +11,7 @@ import { NumberInput } from "./NumberInput";
 
 interface InputFormProps {
   options: SdfOptions;
+  images: InputImage[];
   onImagesChange: (images: InputImage[]) => void;
   onOptionsChange: (options: SdfOptions) => void;
   onValidityChange: (isValid: boolean) => void;
@@ -18,12 +19,14 @@ interface InputFormProps {
 
 export const InputForm: FunctionComponent<InputFormProps> = ({
   options,
+  images,
   onImagesChange,
   onOptionsChange,
   onValidityChange,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [showSvgSettings, setShowSvgSettings] = useState(false);
+
+  const hasSvgs = useMemo(() => images.some((image) => image.isSvg), [images]);
 
   const handlePickFiles = async () => {
     try {
@@ -45,7 +48,6 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
           const file = await handle.getFile();
 
           const isSvg = file.type.includes("svg");
-          if (isSvg) setShowSvgSettings(true);
 
           const image = await loadImage(file);
           const metadata = {
@@ -58,6 +60,7 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
           return {
             image,
             metadata,
+            isSvg,
           };
         }),
       );
@@ -66,6 +69,23 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!hasSvgs) return;
+    const newSize = { width: options.svgWidth, height: options.svgHeight };
+    onImagesChange(
+      images.map((image) => {
+        if (!image.isSvg) return image;
+
+        image.image.width = newSize.width;
+        image.image.height = newSize.height;
+        return {
+          ...image,
+          metadata: { ...image.metadata, ...newSize },
+        };
+      }),
+    );
+  }, [hasSvgs, options.svgWidth, options.svgHeight]);
 
   const handleOptionChange = (newOptions: Partial<SdfOptions>) =>
     onOptionsChange({ ...options, ...newOptions });
@@ -82,7 +102,7 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
         </Button>
       </Box>
 
-      {showSvgSettings && (
+      {hasSvgs && (
         <Fragment>
           <FormControl
             labelText="SVG Output Width"

@@ -11,7 +11,6 @@ import Box from "./Box";
 import { useOptions } from "../hooks/useOptions";
 import { inputNisIcon, outputNisIcon } from "./icons";
 
-
 export const HomePage: FunctionComponent = () => {
   const [inputImages, setImages] = useState<InputImage[]>([]);
   const [options, setOptions] = useOptions();
@@ -26,7 +25,10 @@ export const HomePage: FunctionComponent = () => {
       inputImages.forEach(async (inputImage) => {
         const sdf = await createSdf(inputImage, options);
         if (isCancelled) return;
-        setSdfImages((i) => [...i, { metadata: inputImage.metadata, canvas: sdf }]);
+        setSdfImages((i) => [
+          ...i,
+          { metadata: inputImage.metadata, canvas: sdf },
+        ]);
       });
     }
     return () => {
@@ -34,13 +36,15 @@ export const HomePage: FunctionComponent = () => {
     };
   }, [inputImages, options, isOptionsValid]);
 
-  const handleDownloadAll = useCallback(() =>
-    sdfImages.forEach(({ canvas, metadata }) => {
-      const url = canvas.toDataURL("image/png");
-      const newName = `SDF_${removeExtension(metadata.name)}.png`;
-      downloadUrl(url, newName);
-    })
-    , [sdfImages]);
+  const handleDownloadAll = useCallback(
+    () =>
+      sdfImages.forEach(({ canvas, metadata }) => {
+        const url = canvas.toDataURL("image/png");
+        const newName = `SDF_${removeExtension(metadata.name)}.png`;
+        downloadUrl(url, newName);
+      }),
+    [sdfImages],
+  );
 
   return (
     <>
@@ -49,6 +53,7 @@ export const HomePage: FunctionComponent = () => {
         <SectionPane title="Options" color="pink">
           <InputForm
             options={options}
+            images={inputImages}
             onImagesChange={setImages}
             onOptionsChange={setOptions}
             onValidityChange={setIsOptionsValid}
@@ -66,16 +71,15 @@ export const HomePage: FunctionComponent = () => {
               {inputNisIcon}
               <p className="nis__description">Input images will appear here</p>
             </div>
-
           )}
         </SectionPane>
 
         <SectionPane title="After" color="blue">
-          {sdfImages.length > 1 &&
+          {sdfImages.length > 1 && (
             <Box mb={0.5}>
               <Button onClick={handleDownloadAll}>Download all</Button>
             </Box>
-          }
+          )}
           <Box flexDirection="column" gap={2}>
             {sdfImages.map(({ canvas, metadata }) => (
               <ImagePreview image={canvas} metadata={metadata} />
@@ -87,17 +91,21 @@ export const HomePage: FunctionComponent = () => {
               <p className="nis__description">Output images will appear here</p>
             </div>
           )}
-
         </SectionPane>
       </main>
     </>
   );
 };
 
-const SectionPane: FunctionComponent<{ color: string, title: string, }> = ({ color, title, children }) =>
+const SectionPane: FunctionComponent<{ color: string; title: string }> = ({
+  color,
+  title,
+  children,
+}) => (
   <section className={`section-pane ${color}`}>
     <Box as="header" mb={0.5}>
       <h2>{title}</h2>
     </Box>
     {children}
   </section>
+);

@@ -6,6 +6,7 @@ export type ImageMetadata = {
 
 export type InputImage = {
   image: HTMLImageElement;
+  isSvg: boolean;
   metadata: ImageMetadata;
 };
 
