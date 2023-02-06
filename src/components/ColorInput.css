@@ -1,0 +1,32 @@
+.color-input__button-group {
+  background-color: var(--color-current-dark);
+}
+.color-input__color-buton {
+  background: none;
+  cursor: pointer;
+  display: flex;
+  padding: 0.125rem;
+}
+.color-input__color-buton::before,
+.color-input__color-buton::after {
+  content: "";
+  width: 0.75rem;
+  height: 1.5rem;
+  display: inline-block;
+  background-color: var(--color-value);
+}
+
+.color-input__color-buton::before {
+  border-top-left-radius: var(--pill);
+  border-bottom-left-radius: var(--pill);
+}
+.color-input__color-buton::after {
+  border-top-right-radius: var(--pill);
+  border-bottom-right-radius: var(--pill);
+}
+
+.color-input__color-buton--transparent::after {
+  background: var(--alpha-bg);
+  background-size: 0.5rem;
+  image-rendering: pixelated;
+}

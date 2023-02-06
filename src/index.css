@@ -11,6 +11,7 @@
   --color-darken: rgba(20, 20, 20, 0.2);
   --color-lighten: rgba(220, 220, 220, 0.2);
   --pill: 1000px;
+  --alpha-bg: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAVSURBVBhXY9i/f/////8ZgfjAgQMASUcKedUZzlAAAAAASUVORK5CYII=");
 }
 html {
   font-size: 16px;
@@ -88,7 +89,7 @@ body {
 }
 
 .alpha-bg {
-  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAVSURBVBhXY9i/f/////8ZgfjAgQMASUcKedUZzlAAAAAASUVORK5CYII=");
+  background-image: var(--alpha-bg);
   image-rendering: pixelated;
   background-size: 16px;
 }

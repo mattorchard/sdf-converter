@@ -17,6 +17,7 @@
   margin: 0.5rem 0;
   background-color: rgba(255, 255, 255, 0.85);
   transition: background-color 0.25s ease-in-out;
+  height: 3rem;
 }
 .form-group__label input:focus {
   background-color: rgba(255, 255, 255, 1);

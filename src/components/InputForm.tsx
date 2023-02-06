@@ -1,12 +1,13 @@
 import { Fragment, FunctionComponent, JSX } from "preact";
 import { useState } from "preact/hooks";
-import { colorPattern, isValidColor } from "../helpers/ColorHelpers";
 import { loadImage } from "../helpers/ImageHelpers";
 import { SdfOptions } from "../helpers/SdfWglHelpers";
 import { InputImage } from "../helpers/UtilTypes";
 import Box from "./Box";
 import { Button } from "./Button";
+import { ColorInput } from "./ColorInput";
 import "./InputForm.css";
+import { NumberInput } from "./NumberInput";
 
 interface InputFormProps {
   options: SdfOptions;
@@ -19,7 +20,7 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
   options,
   onImagesChange,
   onOptionsChange,
-  onValidityChange
+  onValidityChange,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showSvgSettings, setShowSvgSettings] = useState(false);
@@ -43,22 +44,22 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
         fileHandles.map(async (handle) => {
           const file = await handle.getFile();
 
-          const isSvg = file.type.includes("svg")
-          if (isSvg) setShowSvgSettings(true)
+          const isSvg = file.type.includes("svg");
+          if (isSvg) setShowSvgSettings(true);
 
           const image = await loadImage(file);
           const metadata = {
             name: handle.name,
             width: isSvg ? options.svgWidth : image.naturalWidth,
-            height: isSvg ? options.svgHeight : image.naturalHeight
-          }
+            height: isSvg ? options.svgHeight : image.naturalHeight,
+          };
           image.width = metadata.width;
           image.height = metadata.height;
           return {
             image,
             metadata,
-          }
-        })
+          };
+        }),
       );
       onImagesChange(loadedImages);
     } finally {
@@ -72,45 +73,47 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
   return (
     <form
       className="input-form"
-      onSubmit={e => e.preventDefault()}
-      onChange={e => onValidityChange(e.currentTarget.checkValidity())}>
-
+      onSubmit={(e) => e.preventDefault()}
+      onChange={(e) => onValidityChange(e.currentTarget.checkValidity())}
+    >
       <Box>
         <Button onClick={handlePickFiles} disabled={isLoading}>
           {isLoading ? "Loading" : "Pick Images"}
         </Button>
       </Box>
 
-      {showSvgSettings && <Fragment>
-        <FormControl
-          labelText="SVG Output Width"
-          input={
-            <NumberInput
-              min={1}
-              max={16_500}
-              step={1}
-              placeholder="e.g. 500"
-              defaultValue={options.svgWidth}
-              onChange={(svgWidth) => handleOptionChange({ svgWidth })}
-            />
-          }
-          description="How wide to make SVGs in the final image"
-        />
-        <FormControl
-          labelText="SVG Output Height"
-          input={
-            <NumberInput
-              min={1}
-              max={16_500}
-              step={1}
-              placeholder="e.g. 500"
-              defaultValue={options.svgHeight}
-              onChange={(svgHeight) => handleOptionChange({ svgHeight })}
-            />
-          }
-          description="How tall to make SVGs in the final image"
-        />
-      </Fragment>}
+      {showSvgSettings && (
+        <Fragment>
+          <FormControl
+            labelText="SVG Output Width"
+            input={
+              <NumberInput
+                min={1}
+                max={16_500}
+                step={1}
+                placeholder="e.g. 500"
+                defaultValue={options.svgWidth}
+                onChange={(svgWidth) => handleOptionChange({ svgWidth })}
+              />
+            }
+            description="How wide to make SVGs in the final image"
+          />
+          <FormControl
+            labelText="SVG Output Height"
+            input={
+              <NumberInput
+                min={1}
+                max={16_500}
+                step={1}
+                placeholder="e.g. 500"
+                defaultValue={options.svgHeight}
+                onChange={(svgHeight) => handleOptionChange({ svgHeight })}
+              />
+            }
+            description="How tall to make SVGs in the final image"
+          />
+        </Fragment>
+      )}
 
       <FormControl
         labelText="Spread"
@@ -135,7 +138,9 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
             step={1}
             placeholder="e.g. 128"
             defaultValue={options.alphaThreshold}
-            onChange={(alphaThreshold) => handleOptionChange({ alphaThreshold })}
+            onChange={(alphaThreshold) =>
+              handleOptionChange({ alphaThreshold })
+            }
           />
         }
         description="At what transparency level is a pixel enabled"
@@ -159,17 +164,10 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
       <FormControl
         labelText="In Color"
         input={
-          <input
-            type="text"
+          <ColorInput
             placeholder="e.g. #000000"
-            pattern={colorPattern}
             defaultValue={options.inColor}
-            onChange={(e) => {
-              const inColor = e.currentTarget.value;
-              if (!isValidColor(inColor)) return;
-              handleOptionChange({ inColor });
-            }}
-            className="cartoon"
+            onChange={(inColor) => handleOptionChange({ inColor })}
           />
         }
         description="Color to use inside the shape"
@@ -178,17 +176,10 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
       <FormControl
         labelText="Out Color"
         input={
-          <input
-            type="text"
+          <ColorInput
             placeholder="e.g. #000000"
-            pattern={colorPattern}
             defaultValue={options.outColor}
-            onChange={(e) => {
-              const outColor = e.currentTarget.value;
-              if (!isValidColor(outColor)) return;
-              handleOptionChange({ outColor });
-            }}
-            className="cartoon"
+            onChange={(outColor) => handleOptionChange({ outColor })}
           />
         }
         description="Color to use outside the shape"
@@ -210,35 +201,3 @@ const FormControl: FunctionComponent<{
     <p className="form-group__description">{description}</p>
   </div>
 );
-
-
-const NumberInput: FunctionComponent<{
-  min: number,
-  max: number,
-  step: number,
-  placeholder: string,
-  defaultValue: number,
-  onChange: (value: number) => void
-}> = ({
-  min,
-  max,
-  step,
-  placeholder,
-  defaultValue,
-  onChange,
-}) => <input
-      type="number"
-      min={min}
-      max={max}
-      step={step}
-      placeholder={placeholder}
-      defaultValue={defaultValue.toString()}
-      required
-      onChange={(e) => {
-        if (!e.currentTarget.validity.valid) return;
-        const value = Number(e.currentTarget.value);
-        if (isNaN(value)) return;
-        onChange(value)
-      }}
-      className="cartoon"
-    />
