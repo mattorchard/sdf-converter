@@ -13,11 +13,11 @@ interface Size {
 
 function createContext(
   size: Size,
-  type: "2d"
+  type: "2d",
 ): [CanvasRenderingContext2D, HTMLCanvasElement];
 function createContext(
   size: Size,
-  type: "webgl2"
+  type: "webgl2",
 ): [WebGL2RenderingContext, HTMLCanvasElement];
 function createContext(size: Size, type: "webgl2" | "2d") {
   const canvas = document.createElement("canvas");
@@ -67,7 +67,7 @@ const createSdfId = () => {
 
 export const createSdf = (
   source: InputImage,
-  options: SdfOptions
+  options: SdfOptions,
 ): HTMLCanvasElement => {
   const sdfId = createSdfId();
   const timerId = `Creating SDF "${sdfId}"`;
@@ -86,7 +86,7 @@ export const createSdf = (
 
 const downRes = (
   sourceCanvas: HTMLCanvasElement,
-  factor: number
+  factor: number,
 ): HTMLCanvasElement => {
   const newSize = {
     width: sourceCanvas.width / factor,
@@ -99,7 +99,7 @@ const downRes = (
 
 const createSdfInternal = (
   source: InputImage,
-  options: SdfOptions
+  options: SdfOptions,
 ): HTMLCanvasElement => {
   const size = {
     width: source.metadata.width * options.upResFactor,
@@ -146,7 +146,7 @@ const createSdfInternal = (
   const applyFloatBuffer = (
     attributeLocation: number,
     buffer: WebGLBuffer,
-    dimensions: VecDimension
+    dimensions: VecDimension,
   ) => {
     gl.enableVertexAttribArray(attributeLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -156,7 +156,7 @@ const createSdfInternal = (
       gl.FLOAT,
       false,
       0,
-      0
+      0,
     );
   };
 
@@ -197,25 +197,11 @@ const createSdfInternal = (
     buildShader(gl.VERTEX_SHADER, vertexShader),
     buildShader(gl.FRAGMENT_SHADER, fragmentShader),
   ]);
-  const positionLocation = gl.getAttribLocation(program, "i_position");
-  const texcoordLocation = gl.getAttribLocation(program, "i_texCoord");
+  const texCoordLocation = gl.getAttribLocation(program, "i_texCoord");
 
   // Create a buffer to put three 2d clip space points in
-  const positionBuffer = createBoundBuffer(
-    new Float32Array(getRectangle(size))
-  );
-  const texcoordBuffer = createBoundBuffer(
-    // prettier-ignore
-    new Float32Array([
-      // First Triangle
-      0.0, 0.0,
-      1.0, 0.0,
-      0.0, 1.0,
-      // Second Triangle
-      0.0, 1.0,
-      1.0, 0.0,
-      1.0, 1.0,
-    ])
+  const texCoordBuffer = createBoundBuffer(
+    new Float32Array(getRectangle({ width: 1, height: 1 })),
   );
 
   // Tell WebGL how to convert from clip space to pixels
@@ -226,24 +212,23 @@ const createSdfInternal = (
 
   createTexture(source.image);
 
-  applyFloatBuffer(positionLocation, positionBuffer, 2);
-  applyFloatBuffer(texcoordLocation, texcoordBuffer, 2);
+  applyFloatBuffer(texCoordLocation, texCoordBuffer, 2);
 
   gl.uniform2f(
     gl.getUniformLocation(program, "u_resolution"),
     size.width,
-    size.height
+    size.height,
   );
 
   gl.uniform1i(gl.getUniformLocation(program, "u_spread"), options.spread);
 
   gl.uniform4f(
     gl.getUniformLocation(program, "u_inColor"),
-    ...colorAs4f(options.inColor)
+    ...colorAs4f(options.inColor),
   );
   gl.uniform4f(
     gl.getUniformLocation(program, "u_outColor"),
-    ...colorAs4f(options.outColor)
+    ...colorAs4f(options.outColor),
   );
 
   gl.drawArrays(gl.TRIANGLES, 0, 3 * 2);
