@@ -1,5 +1,9 @@
 .color-input__button-group {
   background-color: var(--color-current-dark);
+  transition: 0.2s filter ease-in-out;
+}
+.color-input__button-group:hover {
+  filter: brightness(1.1);
 }
 .color-input__color-buton {
   background: none;
