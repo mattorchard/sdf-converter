@@ -153,7 +153,7 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
             onChange={(upResFactor) => handleOptionChange({ upResFactor })}
           />
         }
-        description="How much to upscale the image during calculations"
+        description="Scaling factor for image during calculations"
       />
 
       <FormControl

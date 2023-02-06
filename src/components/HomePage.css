@@ -4,9 +4,12 @@
   grid-gap: 2rem;
   align-items: flex-start;
 
-  grid-template-columns: max-content minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns:
+    minmax(max-content, 25rem)
+    minmax(0, 25rem) minmax(0, 25rem);
   padding: 4rem;
   overflow: hidden;
+  justify-content: center;
 }
 @media only screen and (max-width: 1200px) {
   .home-page-grid {
@@ -21,7 +24,6 @@
   }
 }
 .section-pane {
-  backdrop-filter: blur(5px);
   background-color: var(--color-current-light);
   border-radius: 1rem;
   padding: 1rem 1rem 2rem;
