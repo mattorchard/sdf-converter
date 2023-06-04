@@ -4,8 +4,8 @@ precision mediump float;
 uniform sampler2D u_image;
 uniform vec2 u_resolution;
 uniform int u_spread;
-uniform int u_bias;
-uniform int u_threshold;
+uniform float u_outputBias;
+uniform float u_inputThreshold;
 uniform vec4 u_inColor;
 uniform vec4 u_outColor;
 
@@ -15,7 +15,7 @@ out vec4 o_outputColor;
 
 bool isWithinShape(vec2 position);
 bool isWithinShape(vec2 position) {
-  return texture(u_image, position).a >= (float(u_threshold) / 256.0);
+  return texture(u_image, position).a >= u_inputThreshold;
 }
 
 void main() {
@@ -38,6 +38,6 @@ void main() {
 
   float distanceRatio = (sqrt(minDistanceSquared) - 0.5) / float(u_spread);
   float withinPolarity = isStartWithinShape ? 1.0 : -1.0;
-  float intensity = (float(u_bias) / 256.0) + withinPolarity * distanceRatio;
+  float intensity = u_outputBias + withinPolarity * distanceRatio;
   o_outputColor = mix(u_outColor, u_inColor, intensity);
 }
