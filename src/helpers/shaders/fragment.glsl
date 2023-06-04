@@ -4,6 +4,7 @@ precision mediump float;
 uniform sampler2D u_image;
 uniform vec2 u_resolution;
 uniform int u_spread;
+uniform int u_bias;
 uniform vec4 u_inColor;
 uniform vec4 u_outColor;
 
@@ -36,6 +37,6 @@ void main() {
 
   float distanceRatio = (sqrt(minDistanceSquared) - 0.5) / float(u_spread);
   float withinPolarity = isStartWithinShape ? 1.0 : -1.0;
-  float intensity = 0.5 + withinPolarity * distanceRatio;
+  float intensity = (float(u_bias) / 256.0) + withinPolarity * distanceRatio;
   o_outputColor = mix(u_outColor, u_inColor, intensity);
 }

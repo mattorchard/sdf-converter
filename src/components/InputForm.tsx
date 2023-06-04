@@ -167,6 +167,21 @@ export const InputForm: FunctionComponent<InputFormProps> = ({
       />
 
       <FormControl
+        labelText="Output Bias"
+        input={
+          <NumberInput
+            min={1}
+            max={255}
+            step={1}
+            placeholder="e.g. 128"
+            defaultValue={options.bias}
+            onChange={(bias) => handleOptionChange({ bias })}
+          />
+        }
+        description="What transparency to center an edge on"
+      />
+
+      <FormControl
         labelText="Up Res Factor"
         input={
           <NumberInput

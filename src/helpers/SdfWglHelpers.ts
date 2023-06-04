@@ -52,6 +52,7 @@ const colorAs4f = (color: string) => {
 export interface SdfOptions {
   upResFactor: number;
   alphaThreshold: number;
+  bias: number;
   spread: number;
   inColor: string;
   outColor: string;
@@ -221,6 +222,7 @@ const createSdfInternal = (
   );
 
   gl.uniform1i(gl.getUniformLocation(program, "u_spread"), options.spread);
+  gl.uniform1i(gl.getUniformLocation(program, "u_bias"), options.bias);
 
   gl.uniform4f(
     gl.getUniformLocation(program, "u_inColor"),

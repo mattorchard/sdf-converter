@@ -8,6 +8,7 @@ const defaultOptions: SdfOptions = {
   upResFactor: 2,
   spread: 10,
   alphaThreshold: 128,
+  bias: 128,
   svgWidth: 512,
   svgHeight: 512,
   inColor: "#000000FF",
@@ -30,6 +31,7 @@ const getInitialState = (): SdfOptions => {
   return {
     upResFactor: getNum("upResFactor"),
     spread: getNum("spread"),
+    bias: getNum("bias"),
     alphaThreshold: getNum("alphaThreshold"),
     svgWidth: getNum("svgWidth"),
     svgHeight: getNum("svgHeight"),

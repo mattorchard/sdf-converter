@@ -1,5 +1,5 @@
 .input-form {
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 .input-form,
 .form-group,
@@ -8,16 +8,16 @@
   flex-direction: column;
 }
 .form-group__label {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 }
 .form-group__label input {
   width: 10rem;
-  font-size: 1.5rem;
-  padding: 0.5rem;
+  font-size: 1.25rem;
+  padding: 0.25rem 0.75rem;
   margin: 0.5rem 0;
   background-color: rgba(255, 255, 255, 0.85);
   transition: background-color 0.25s ease-in-out;
-  height: 3rem;
+  height: 2.5rem;
 }
 .form-group__label input:focus {
   background-color: rgba(255, 255, 255, 1);
@@ -30,4 +30,8 @@
 .form-group__label input:invalid {
   color: crimson;
   text-decoration: underline;
+}
+
+.form-group__label input[type="number"] {
+  width: 8rem;
 }
