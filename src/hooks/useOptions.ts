@@ -5,7 +5,7 @@ import { objectAsQueryParam, replaceUrlParams } from "../helpers/UrlHelpers";
 import { KeysOfValues } from "../helpers/UtilTypes";
 
 const defaultOptions: SdfOptions = {
-  upResFactor: 2,
+  upResFactor: 1,
   spread: 10,
   alphaThreshold: 128,
   bias: 128,
