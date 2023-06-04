@@ -5,6 +5,7 @@ uniform sampler2D u_image;
 uniform vec2 u_resolution;
 uniform int u_spread;
 uniform int u_bias;
+uniform int u_threshold;
 uniform vec4 u_inColor;
 uniform vec4 u_outColor;
 
@@ -14,7 +15,7 @@ out vec4 o_outputColor;
 
 bool isWithinShape(vec2 position);
 bool isWithinShape(vec2 position) {
-  return texture(u_image, position).a >= 0.5;
+  return texture(u_image, position).a >= (float(u_threshold) / 256.0);
 }
 
 void main() {
